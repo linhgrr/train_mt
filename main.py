@@ -8,6 +8,7 @@ from models.schemas import TranslationRequest, TranslationResponse, HealthRespon
 from services.ner_service import ner_service
 from services.translation_service import translation_service
 from services.database import db_service
+from config.settings import settings
 
 # Setup logging
 logging.basicConfig(
@@ -208,8 +209,8 @@ async def add_entity(japanese: str, english: str):
 if __name__ == "__main__":
     uvicorn.run(
         "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True,
+        host=settings.HOST,
+        port=settings.PORT,
+        reload=settings.DEBUG,
         log_level="info"
     )
