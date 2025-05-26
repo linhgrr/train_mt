@@ -21,6 +21,8 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """Application lifespan events"""
     logger.info("Starting Japanese Train Announcement Translation API")
+    logger.info(f"Port configured: {settings.PORT}")
+    logger.info(f"Host configured: {settings.HOST}")
     
     # Check services on startup
     if not ner_service.ner_pipeline:
@@ -58,6 +60,7 @@ async def root():
     return {
         "message": "Japanese Train Announcement Translation API",
         "version": "1.0.0",
+        "port": settings.PORT,
         "endpoints": {
             "translate": "/translate",
             "health": "/health",
@@ -203,10 +206,12 @@ async def add_entity(japanese: str, english: str):
         logger.error(f"Error adding entity: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to add entity: {str(e)}"
-        )
+            detail=f"Failed to add entity: {str(e)}"        )
 
+# For production deployment, we don't need the uvicorn.run in __main__
+# The uvicorn command in render.yaml will handle starting the server
 if __name__ == "__main__":
+    # Only run this for local development
     uvicorn.run(
         "main:app",
         host=settings.HOST,

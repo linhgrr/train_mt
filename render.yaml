@@ -3,7 +3,8 @@ services:
     name: japanese-translator
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    startCommand: python start.py
+    plan: starter
     envVars:
       - key: DB_HOST
         value: 103.97.126.29
@@ -17,4 +18,3 @@ services:
         value: 12345678
       - key: CUDA_AVAILABLE
         value: false
-    autoDeploy: false
